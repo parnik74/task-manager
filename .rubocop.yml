@@ -5,7 +5,7 @@ AllCops:
   Exclude:
     - 'bin/**/*'
     - 'db/**/*'
-    # - 'config/**/*'
+    - 'config/**/*'
     - 'node_modules/**/*'
     - 'script/**/*'
     - 'support/**/*'
