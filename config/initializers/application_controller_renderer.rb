@@ -1,8 +1,20 @@
-# Be sure to restart your server when you modify this file.
+# frozen_string_literal: true
 
-# ActiveSupport::Reloader.to_prepare do
-#   ApplicationController.renderer.defaults.merge!(
-#     http_host: 'example.org',
-#     https: false
-#   )
-# end
+## Define all application constants here
+API_VENDOR = 'rails5-grape-api-example'
+
+# https://en.wikipedia.org/wiki/List_of_HTTP_status_codes
+RESPONSE_CODE = {
+  success: 200,
+  bad_request: 400,
+  unauthorized: 401,
+  forbidden: 403,
+  not_found: 404,
+  unprocessable_entity: 422,
+  internal_server_error: 500,
+  common_error: 1001
+}.freeze
+
+# Request header
+
+PER_PAGE = 20

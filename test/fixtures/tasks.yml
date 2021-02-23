@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  status: MyString
+  description: MyText
+  due_time: 2021-02-17 12:10:54
+  project: one
+  executor: one
+
+two:
+  name: MyString
+  status: MyString
+  description: MyText
+  due_time: 2021-02-17 12:10:54
+  project: two
+  executor: two
