@@ -10,7 +10,7 @@ module V1
         { code: 200, message: 'success' },
         { code: RESPONSE_CODE[:forbidden], message: I18n.t('errors.forbidden') }
       ]
-      get '/tasks' do
+      get do
         tasks = Task.all
         render_success(TaskBlueprint.render_as_json(tasks))
       end
@@ -21,12 +21,13 @@ module V1
       { code: RESPONSE_CODE[:not_found], message: I18n.t('errors.not_found') }
     ]
     params do
-      requires :id, String, desc: 'Task ID'
+      # requires :id, String, desc: 'Task ID' #THIS DOES NOT MAKE SENSE why i need to
     end
-
-    get 'tasks/:id' do
-      task = Task.find(params[:id])
-      render_success(TaskBlueprint.render_as_json(task))
+    route_param :id do
+      get do
+        task = Task.find(params[:id])
+        render_success(TaskBlueprint.render_as_json(task))
+      end
     end
 
     desc 'Create new task', http_codes: [
@@ -41,7 +42,7 @@ module V1
       requires :executor_id, type: Integer, desc: 'Who is responsible for the execution'
       optional :description, type: String, desc: 'Task description'
     end
-    post 'tasks' do
+    post do
       task = Task.new(params)
       if task.save
         render_success(TaskBlueprint.render_as_json(task))
@@ -65,13 +66,15 @@ module V1
       optional :executor_id, type: Integer, desc: 'Who is responsible for the execution'
       optional :description, type: String, desc: 'Task description'
     end
-    patch 'tasks/:id' do
-      task = Task.find(params[:id])
-      if task.update(params)
-        render_success(TaskBlueprint.render_as_json(task))
-      else
-        error = task.errors.full_messages.join(', ')
-        render_error(RESPONSE_CODE[:unprocessable_entity], error)
+    route_param :id do
+      patch do
+        task = Task.find(params[:id])
+        if task.update(params)
+          render_success(TaskBlueprint.render_as_json(task))
+        else
+          error = task.errors.full_messages.join(', ')
+          render_error(RESPONSE_CODE[:unprocessable_entity], error)
+        end
       end
     end
 
@@ -79,10 +82,12 @@ module V1
       { code: 200, message: 'success' },
       { code: RESPONSE_CODE[:unauthorized], message: I18n.t('errors.session.invalid_token') }
     ]
-    delete 'tasks/:id' do
-      task = Task.find(params[:id])
-      task.destroy
-      render_success({})
+    route_param :id do
+      delete do
+        task = Task.find(params[:id])
+        task.destroy
+        render_success({})
+      end
     end
   end
 end

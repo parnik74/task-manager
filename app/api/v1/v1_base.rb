@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module V1Base
+module V1::V1Base
   extend ActiveSupport::Concern
 
   HEADERS_DOCS = {
@@ -14,8 +14,8 @@ module V1Base
     format :json
     prefix :api
     default_format :json
-    formatter :json,
-              Grape::Formatter::ActiveModelSerializers
+    # formatter :json,
+    #           Grape::Formatter::ActiveModelSerializers
 
     version 'v1', using: :header, vendor: API_VENDOR
 

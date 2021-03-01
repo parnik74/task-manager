@@ -10,7 +10,7 @@ module V1
         { code: 200, message: 'success' },
         { code: RESPONSE_CODE[:forbidden], message: I18n.t('errors.forbidden') }
       ]
-      get '/executors' do
+      get do
         executors = Executor.all
         render_success(ExecutorBlueprint.render_as_json(executors))
       end
@@ -23,9 +23,11 @@ module V1
     params do
       requires :id, type: String, desc: 'Executor id'
     end
-    get 'executors/:id' do
-      executor = Executor.find(params[:id])
-      render_success(ExecutorBlueprint.render_as_json(executor))
+    route_param :id do
+      get do
+        executor = Executor.find(params[:id])
+        render_success(ExecutorBlueprint.render_as_json(executor))
+      end
     end
 
     desc 'Create new executor', http_codes: [
@@ -37,7 +39,7 @@ module V1
       optional :project_id, type: String, desc: 'Project ID'
       optional :task_id, type: String, desc: 'Task ID'
     end
-    post 'executors' do
+    post do
       executor = Executor.new(params)
       if executor.save
         render_success(ExecutorBlueprint.render_as_json(executor))
@@ -56,13 +58,15 @@ module V1
     params do
       optional :name, type: String, desc: 'Executor name'
     end
-    patch 'executors/:id' do
-      executor = Executor.find(params[:id])
-      if executor.update(params)
-        render_success(ExecutorBlueprint.render_as_json(executor))
-      else
-        error = executor.errors.full_messages.join(', ')
-        render_error(RESPONSE_CODE[:unprocessable_entity], error)
+    route_param :id do
+      patch do
+        executor = Executor.find(params[:id])
+        if executor.update(params)
+          render_success(ExecutorBlueprint.render_as_json(executor))
+        else
+          error = executor.errors.full_messages.join(', ')
+          render_error(RESPONSE_CODE[:unprocessable_entity], error)
+        end
       end
     end
 
@@ -70,13 +74,12 @@ module V1
       { code: 200, message: 'success' },
       { code: RESPONSE_CODE[:unauthorized], message: I18n.t('errors.session.invalid_token') }
     ]
-    delete 'executors/:id' do
-      executor = Executor.find(params[:id])
-      executor.destroy
-      render_success({})
+    route_param :id do
+      delete do
+        executor = Executor.find(params[:id])
+        executor.destroy
+        render_success({})
+      end
     end
-    # def permitted_params
-    #   params.require(:executor).permit(:name) # #CHECK PARAMS
-    # end
   end
 end
