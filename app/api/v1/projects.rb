@@ -23,10 +23,11 @@ module V1
     params do
       requires :id, type: String, desc: 'Project id'
     end
-
-    get 'projects/:id' do
-      project = Project.find(params[:id])
-      render_success(ProjectBlueprint.render_as_json(project))
+    route_param :id do
+      get do
+        project = Project.find(params[:id])
+        render_success(ProjectBlueprint.render_as_json(project))
+      end
     end
 
     desc 'Create new project', http_codes: [
@@ -36,9 +37,10 @@ module V1
     params do
       requires :name, type: String, desc: 'Project name'
       requires :status, type: String, desc: 'Project status'
+      requires :owner, type: Integer, desc: 'ID of the person running the project'
       optional :description, type: String, desc: 'Project desc'
     end
-    post 'projects' do
+    post do
       project = Project.new(params)
       if project.save
         render_success(ProjectBlueprint.render_as_json(project))
@@ -58,14 +60,17 @@ module V1
       optional :name, type: String, desc: 'Project name'
       optional :description, type: String, desc: 'Project description'
       optional :status, type: String, desc: 'Project status'
+      optional :owner, type: Integer, desc: 'ID of the person running the project'
     end
-    patch 'projects/:id' do
-      project = Project.find(params[:id])
-      if project.update(params)
-        render_success(ProjectBlueprint.render_as_json(project))
-      else
-        error = project.errors.full_messages.join(', ')
-        render_error(RESPONSE_CODE[:unprocessable_entity], error)
+    route_param :id do
+      patch do
+        project = Project.find(params[:id])
+        if project.update(params)
+          render_success(ProjectBlueprint.render_as_json(project))
+        else
+          error = project.errors.full_messages.join(', ')
+          render_error(RESPONSE_CODE[:unprocessable_entity], error)
+        end
       end
     end
 
@@ -73,10 +78,12 @@ module V1
       { code: 200, message: 'success' },
       { code: RESPONSE_CODE[:unauthorized], message: I18n.t('errors.session.invalid_token') }
     ]
-    delete 'projects/:id' do
-      project = Project.find(params[:id])
-      project.destroy
-      render_success({})
+    route_param :id do
+      delete do
+        project = Project.find(params[:id])
+        project.destroy
+        render_success({})
+      end
     end
   end
 end
