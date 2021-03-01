@@ -37,7 +37,7 @@ module V1
     params do
       requires :name, type: String, desc: 'Project name'
       requires :status, type: String, desc: 'Project status'
-      requires :executor_id, type: Integer, desc: 'ID of the person running the project'
+      requires :owner, type: Integer, desc: 'ID of the person running the project'
       optional :description, type: String, desc: 'Project desc'
     end
     post do
@@ -60,7 +60,7 @@ module V1
       optional :name, type: String, desc: 'Project name'
       optional :description, type: String, desc: 'Project description'
       optional :status, type: String, desc: 'Project status'
-      optional :executor_id, type: Integer, desc: 'ID of the person running the project'
+      optional :owner, type: Integer, desc: 'ID of the person running the project'
     end
     route_param :id do
       patch do

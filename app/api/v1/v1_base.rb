@@ -14,7 +14,7 @@ module V1::V1Base
     format :json
     prefix :api
     default_format :json
-    # formatter :json,
+    # formatter :json
     #           Grape::Formatter::ActiveModelSerializers
 
     version 'v1', using: :header, vendor: API_VENDOR

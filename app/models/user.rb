@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Executor < ApplicationRecord
+class User < ApplicationRecord
   validates :name, presence: true
   has_many :tasks
 end
