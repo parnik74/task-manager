@@ -4,9 +4,9 @@ require 'json'
 
 module V1
   class Users < Grape::API
-    include V1Base
+    # include V1Base
     resource :users do
-      desc 'Get all users', headers: HEADERS_DOCS, http_codes: [
+      desc 'Get all users', http_codes: [
         { code: 200, message: 'success' },
         { code: RESPONSE_CODE[:forbidden], message: I18n.t('errors.forbidden') }
       ]
@@ -16,7 +16,7 @@ module V1
       end
     end
 
-    desc 'Return a single user', headers: HEADERS_DOCS, http_codes: [
+    desc 'Return a single user', http_codes: [
       { code: 200, message: 'success' },
       { code: RESPONSE_CODE[:not_found], message: I18n.t('errors.not_found') }
     ]
@@ -49,7 +49,7 @@ module V1
       end
     end
 
-    desc 'Update user', headers: HEADERS_DOCS, http_codes: [
+    desc 'Update user', http_codes: [
       { code: 200, message: 'success' },
       { code: RESPONSE_CODE[:forbidden], message: I18n.t('errors.forbidden') },
       { code: RESPONSE_CODE[:unprocessable_entity], message: 'Validation error messages' },
@@ -70,7 +70,7 @@ module V1
       end
     end
 
-    desc 'Delete user', headers: HEADERS_DOCS, http_codes: [
+    desc 'Delete user', http_codes: [
       { code: 200, message: 'success' },
       { code: RESPONSE_CODE[:unauthorized], message: I18n.t('errors.session.invalid_token') }
     ]

@@ -4,9 +4,9 @@ require 'json'
 
 module V1
   class Projects < Grape::API
-    include V1Base
+    # include V1Base
     resource :projects do
-      desc 'Get all projects', headers: HEADERS_DOCS, http_codes: [
+      desc 'Get all projects', http_codes: [
         { code: 200, message: 'success' },
         { code: RESPONSE_CODE[:forbidden], message: I18n.t('errors.forbidden') }
       ]
@@ -16,7 +16,7 @@ module V1
       end
     end
 
-    desc 'Return a single project', headers: HEADERS_DOCS, http_codes: [
+    desc 'Return a single project', http_codes: [
       { code: 200, message: 'success' },
       { code: RESPONSE_CODE[:not_found], message: I18n.t('errors.not_found') }
     ]
@@ -50,7 +50,7 @@ module V1
       end
     end
 
-    desc 'Update project', headers: HEADERS_DOCS, http_codes: [
+    desc 'Update project', http_codes: [
       { code: 200, message: 'success' },
       { code: RESPONSE_CODE[:forbidden], message: I18n.t('errors.forbidden') },
       { code: RESPONSE_CODE[:unprocessable_entity], message: 'Validation error messages' },
@@ -74,7 +74,7 @@ module V1
       end
     end
 
-    desc 'Delete project', headers: HEADERS_DOCS, http_codes: [
+    desc 'Delete project', http_codes: [
       { code: 200, message: 'success' },
       { code: RESPONSE_CODE[:unauthorized], message: I18n.t('errors.session.invalid_token') }
     ]
