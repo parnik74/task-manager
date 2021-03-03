@@ -4,9 +4,9 @@ require 'json'
 
 module V1
   class Tasks < Grape::API
-    include V1Base
+    # include V1Base
     resource :tasks do
-      desc 'Get all tasks', headers: HEADERS_DOCS, http_codes: [
+      desc 'Get all tasks', http_codes: [
         { code: 200, message: 'success' },
         { code: RESPONSE_CODE[:forbidden], message: I18n.t('errors.forbidden') }
       ]
@@ -16,7 +16,7 @@ module V1
       end
     end
 
-    desc 'Return a single task', headers: HEADERS_DOCS, http_codes: [
+    desc 'Return a single task', http_codes: [
       { code: 200, message: 'success' },
       { code: RESPONSE_CODE[:not_found], message: I18n.t('errors.not_found') }
     ]
@@ -52,7 +52,7 @@ module V1
       end
     end
 
-    desc 'Update task', headers: HEADERS_DOCS, http_codes: [
+    desc 'Update task', http_codes: [
       { code: 200, message: 'success' },
       { code: RESPONSE_CODE[:forbidden], message: I18n.t('errors.forbidden') },
       { code: RESPONSE_CODE[:unprocessable_entity], message: 'Validation error messages' },
@@ -78,7 +78,7 @@ module V1
       end
     end
 
-    desc 'Delete task', headers: HEADERS_DOCS, http_codes: [
+    desc 'Delete task', http_codes: [
       { code: 200, message: 'success' },
       { code: RESPONSE_CODE[:unauthorized], message: I18n.t('errors.session.invalid_token') }
     ]
