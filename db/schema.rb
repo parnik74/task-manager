@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_01_112356) do
+ActiveRecord::Schema.define(version: 2021_03_15_131059) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(version: 2021_03_01_112356) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "owner"
+    t.datetime "deleted_at"
     t.index ["owner"], name: "index_projects_on_owner"
   end
 
@@ -30,10 +31,11 @@ ActiveRecord::Schema.define(version: 2021_03_01_112356) do
     t.string "status"
     t.text "description"
     t.datetime "due_time"
-    t.bigint "project_id", null: false
+    t.integer "project_id"
     t.bigint "assignee", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.datetime "deleted_at"
     t.index ["assignee"], name: "index_tasks_on_assignee"
     t.index ["project_id"], name: "index_tasks_on_project_id"
   end
@@ -42,6 +44,7 @@ ActiveRecord::Schema.define(version: 2021_03_01_112356) do
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.datetime "deleted_at"
   end
 
   add_foreign_key "projects", "users", column: "owner"
