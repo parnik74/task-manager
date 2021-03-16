@@ -61,8 +61,7 @@ module V1
         end
         patch do
           resource_user
-          if resource
-            resource_user.update(params)
+          if resource_user.update(params)
             render_success(UserBlueprint.render_as_json(resource_user))
           else
             error = resource_user.errors.full_messages.join(', ')
@@ -76,7 +75,7 @@ module V1
         ]
         delete do
           resource_user
-          resource_user.destroy
+          resource_user.soft_delete
           render_success({})
         end
       end

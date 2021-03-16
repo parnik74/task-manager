@@ -2,5 +2,5 @@
 
 class UserBlueprint < Blueprinter::Base
   identifier :id
-  fields :name
+  fields :name, :deleted_at
 end

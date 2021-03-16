@@ -47,10 +47,6 @@ module V1
           total_count: object.total_count
         }
       end
-
-      def time_deleted(object)
-        object.deleted_at = Time.current
-      end
     end
     mount V1::Projects
     mount V1::Tasks

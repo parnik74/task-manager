@@ -21,9 +21,9 @@ module V1
       params do
         requires :name, type: String, desc: 'Task name'
         requires :status, type: String, desc: 'Task status'
-        requires :due_time, type: Date, desc: 'Task deadline'
+        optional :due_time, type: Date, desc: 'Task deadline'
         requires :project_id, type: Integer, desc: 'Which project this task belongs to'
-        requires :assignee, type: Integer, desc: 'Who is responsible for the execution'
+        requires :assignee_id, type: Integer, desc: 'Who is responsible for the execution'
         optional :description, type: String, desc: 'Task description'
       end
       post do
@@ -65,7 +65,7 @@ module V1
           optional :status, type: String, desc: 'Task status'
           optional :due_time, type: Date, desc: 'Task deadline'
           optional :project_id, type: Integer, desc: 'Which project this task belongs to'
-          optional :assignee, type: Integer, desc: 'Who is responsible for the execution'
+          optional :assignee_id, type: Integer, desc: 'Who is responsible for the execution'
           optional :description, type: String, desc: 'Task description'
         end
 
@@ -86,7 +86,7 @@ module V1
 
         delete do
           resource_task
-          resource_task.destroy
+          resource_task.soft_delete
           render_success({})
         end
       end

@@ -21,7 +21,7 @@ module V1
       params do
         requires :name, type: String, desc: 'Project name'
         requires :status, type: String, desc: 'Project status'
-        requires :owner, type: Integer, desc: 'ID of the person running the project'
+        requires :owner_id, type: Integer, desc: 'ID of the person running the project'
         optional :description, type: String, desc: 'Project desc'
       end
       post do
@@ -38,6 +38,10 @@ module V1
         helpers do
           def resource_project
             @resource_project ||= Project.find(params[:id])
+          end
+
+          def soft_delete(object)
+            object.update(object.deleted_at = Time.current)
           end
         end
         desc 'Return a single project', http_codes: [
@@ -62,7 +66,7 @@ module V1
           optional :name, type: String, desc: 'Project name'
           optional :description, type: String, desc: 'Project description'
           optional :status, type: String, desc: 'Project status'
-          optional :owner, type: Integer, desc: 'ID of the person running the project'
+          optional :owner_id, type: Integer, desc: 'ID of the person running the project'
         end
         patch do
           resource_project
@@ -79,23 +83,11 @@ module V1
           { code: RESPONSE_CODE[:unauthorized], message: I18n.t('errors.session.invalid_token') }
         ]
         delete do
-          resource_project #Находим проект
-          if resource_project.update(time_deleted(resource_project))
-            render_success(ProjectBlueprint.render_as_json(resource_project))
-          else
-            error = resource_project.errors.full_messages.join(', ')
-            render_error(RESPONSE_CODE[:unprocessable_entity], error)
-          end
+          resource_project
+          resource_project.soft_delete
+          render_success({})
         end
       end
     end
   end
 end
-
-# resource_project
-# if time_deleted(resource_project)
-#   render_success(ProjectBlueprint.render_as_json(resource_project))
-# else
-#   error = resource_project.errors.full_messages.join(', ')
-#   render_error(RESPONSE_CODE[:unprocessable_entity], error)
-# end
