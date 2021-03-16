@@ -2,5 +2,5 @@
 
 class TaskBlueprint < Blueprinter::Base
   identifier :id
-  fields :name, :description, :status, :project_id, :executor_id
+  fields :name, :status, :description, :due_time, :project_id, :assignee_id, :deleted_at
 end
