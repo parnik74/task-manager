@@ -67,6 +67,7 @@ module V1
           optional :description, type: String, desc: 'Project description'
           optional :status, type: String, desc: 'Project status'
           optional :owner_id, type: Integer, desc: 'ID of the person running the project'
+          optional :deleted_at, type: DateTime, desc: 'Change to null to restore project from deleted'
         end
         patch do
           resource_project

@@ -58,6 +58,7 @@ module V1
         ]
         params do
           optional :name, type: String, desc: 'User name'
+          optional :deleted_at, type: DateTime, desc: 'Change to null to restore user from deleted'
         end
         patch do
           resource_user
