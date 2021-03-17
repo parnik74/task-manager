@@ -67,6 +67,7 @@ module V1
           optional :project_id, type: Integer, desc: 'Which project this task belongs to'
           optional :assignee_id, type: Integer, desc: 'Who is responsible for the execution'
           optional :description, type: String, desc: 'Task description'
+          optional :deleted_at, type: DateTime, desc: 'Change to null to restore task from deleted'
         end
 
         patch do
