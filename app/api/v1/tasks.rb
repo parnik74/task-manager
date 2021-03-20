@@ -50,7 +50,6 @@ module V1
           requires :id, type: String, desc: 'Task id'
         end
         get do
-          resource_task
           render_success(TaskBlueprint.render_as_json(resource_task))
         end
 
@@ -71,7 +70,6 @@ module V1
         end
 
         patch do
-          resource_task
           if resource_task.update(params)
             render_success(TaskBlueprint.render_as_json(resource_task))
           else
@@ -86,7 +84,6 @@ module V1
         ]
 
         delete do
-          resource_task
           resource_task.soft_delete
           render_success({})
         end
