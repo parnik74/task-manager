@@ -52,7 +52,6 @@ module V1
           requires :id, type: String, desc: 'Project id'
         end
         get do
-          resource_project
           render_success(ProjectBlueprint.render_as_json(resource_project))
         end
 
@@ -70,7 +69,6 @@ module V1
           optional :deleted_at, type: DateTime, desc: 'Change to null to restore project from deleted'
         end
         patch do
-          resource_project
           if resource_project.update(params)
             render_success(ProjectBlueprint.render_as_json(resource_project))
           else
@@ -84,7 +82,6 @@ module V1
           { code: RESPONSE_CODE[:unauthorized], message: I18n.t('errors.session.invalid_token') }
         ]
         delete do
-          resource_project
           resource_project.soft_delete
           render_success({})
         end

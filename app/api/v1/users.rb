@@ -46,8 +46,7 @@ module V1
         end
 
         get do
-          user = User.find(params[:id])
-          render_success(UserBlueprint.render_as_json(user))
+          render_success(UserBlueprint.render_as_json(resource_user))
         end
 
         desc 'Update user', http_codes: [
@@ -61,7 +60,6 @@ module V1
           optional :deleted_at, type: DateTime, desc: 'Change to null to restore user from deleted'
         end
         patch do
-          resource_user
           if resource_user.update(params)
             render_success(UserBlueprint.render_as_json(resource_user))
           else
@@ -75,7 +73,6 @@ module V1
           { code: RESPONSE_CODE[:unauthorized], message: I18n.t('errors.session.invalid_token') }
         ]
         delete do
-          resource_user
           resource_user.soft_delete
           render_success({})
         end
