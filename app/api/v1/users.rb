@@ -1,9 +1,16 @@
 # frozen_string_literal: true
 
 require 'json'
+require 'doorkeeper/grape/helpers'
 
 module V1
   class Users < Grape::API
+    helpers Doorkeeper::Grape::Helpers
+
+    before do
+      doorkeeper_authorize!
+    end
+
     resource :users do
       desc 'Get all users', http_codes: [
         { code: 200, message: 'success' },
@@ -19,7 +26,7 @@ module V1
         { code: RESPONSE_CODE[:unprocessable_entity], message: 'Detail error messages' }
       ]
       params do
-        requires :name, type: String, desc: 'User name'
+        optional :name, type: String, desc: 'User name'
       end
       post do
         user = User.new(params)

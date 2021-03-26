@@ -6,6 +6,8 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '2.6.6'
 gem 'blueprinter'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
+gem 'devise'
+gem 'doorkeeper'
 gem 'rails', '~> 6.0.3', '>= 6.0.3.4'
 # Use postgresql as the database for Active Record
 gem 'pg', '>= 0.18', '< 2.0'
@@ -24,8 +26,8 @@ gem 'jbuilder', '~> 2.7'
 # Use Active Model has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 gem 'rubocop', require: false
-
 gem 'rubocop-rails', require: false
+
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
 
