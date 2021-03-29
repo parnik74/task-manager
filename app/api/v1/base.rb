@@ -48,6 +48,12 @@ module V1
         }
       end
     end
+
+    private
+
+    def current_user
+      @current_user ||= User.find(doorkeeper_token.resource_owner_id)
+    end
     mount V1::Projects
     mount V1::Tasks
     mount V1::Users

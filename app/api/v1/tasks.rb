@@ -10,7 +10,7 @@ module V1
         { code: RESPONSE_CODE[:forbidden], message: I18n.t('errors.forbidden') }
       ]
       get do
-        tasks = Task.all
+        tasks = current_user.tasks
         render_success(TaskBlueprint.render_as_json(tasks))
       end
 
