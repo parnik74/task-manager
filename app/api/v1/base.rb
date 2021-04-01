@@ -1,7 +1,19 @@
 # frozen_string_literal: true
 
+require 'doorkeeper/grape/helpers'
+
 module V1
   class Base < Grape::API
+    def self.inherited(subclass)
+      super
+      subclass.instance_eval do
+        before do
+          doorkeeper_authorize!
+        end
+        helpers V1::Helpers::Authentication,
+                Doorkeeper::Grape::Helpers
+      end
+    end
     HEADERS_DOCS = {
       Authorization: {
         description: 'User Authorization Token',
