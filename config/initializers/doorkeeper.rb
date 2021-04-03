@@ -24,6 +24,17 @@ Doorkeeper.configure do
     true
   end
 
+  admin_authenticator do
+    # Put your admin authentication logic here.
+    # Example implementation:
+
+    if current_user
+      head :forbidden unless current_user.admin?
+    else
+      redirect_to sign_in_url
+    end
+  end
+
   resource_owner_from_credentials do |routes|
     user = User.find_by_email(params[:username].downcase)
     puts "hello"

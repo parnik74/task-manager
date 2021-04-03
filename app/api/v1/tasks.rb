@@ -5,6 +5,7 @@ require 'json'
 module V1
   class Tasks < Grape::API
     resource :tasks do
+    # doorkeeper_for :all
       desc 'Get all tasks', http_codes: [
         { code: 200, message: 'success' },
         { code: RESPONSE_CODE[:forbidden], message: I18n.t('errors.forbidden') }
