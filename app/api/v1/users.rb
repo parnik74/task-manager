@@ -10,7 +10,6 @@ module V1
     before do
       doorkeeper_authorize!
     end
-
     resource :users do
       desc 'Get all users', http_codes: [
         { code: 200, message: 'success' },
