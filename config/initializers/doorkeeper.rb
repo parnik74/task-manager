@@ -44,10 +44,7 @@ Doorkeeper.configure do
 
   resource_owner_from_credentials do |routes|
     user = User.find_by_email(params[:username].downcase)
-    puts "hello"
     if user && user.valid_password?(params[:password])
-      pp user.valid_password?(params[:password])
-      puts "hello"
       user
     end
   end

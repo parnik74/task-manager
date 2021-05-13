@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'doorkeeper/grape/helpers'
+# require 'doorkeeper/grape/helpers'
 
 module V1
   class Base < Grape::API
@@ -10,8 +10,8 @@ module V1
         before do
           doorkeeper_authorize!
         end
-        helpers V1::Helpers::Authentication,
-                Doorkeeper::Grape::Helpers
+        include V1::Helpers::Authentication
+        include Doorkeeper::Grape::Helpers
       end
     end
     HEADERS_DOCS = {

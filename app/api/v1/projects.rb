@@ -4,11 +4,11 @@ require 'json'
 
 module V1
   class Projects < Grape::API
-    helpers Doorkeeper::Grape::Helpers
+    # helpers Doorkeeper::Grape::Helpers
 
-    before do
-      doorkeeper_authorize!
-    end
+    # before do
+    #   doorkeeper_authorize!
+    # end
     resource :projects do
       desc 'Get all projects', http_codes: [
         { code: 200, message: 'success' },
@@ -16,7 +16,6 @@ module V1
       ]
       get do
         projects = Project.all
-        # projects = current_user.projects
         render_success(ProjectBlueprint.render_as_json(projects))
       end
 
