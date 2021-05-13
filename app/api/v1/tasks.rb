@@ -4,20 +4,18 @@ require 'json'
 
 module V1
   class Tasks < Grape::API
-    helpers Doorkeeper::Grape::Helpers
+    # helpers Doorkeeper::Grape::Helpers
 
-    before do
-      doorkeeper_authorize!
-    end
+    # before do
+    #   doorkeeper_authorize!
+    # end
     resource :tasks do
-      # doorkeeper_for :all
       desc 'Get all tasks', http_codes: [
         { code: 200, message: 'success' },
         { code: RESPONSE_CODE[:forbidden], message: I18n.t('errors.forbidden') }
       ]
       get do
         tasks = Task.all
-        # tasks = current_user.tasks
         render_success(TaskBlueprint.render_as_json(tasks))
       end
 

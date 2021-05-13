@@ -1,17 +1,17 @@
 # frozen_string_literal: true
 
-require 'doorkeeper/grape/helpers'
+# require 'doorkeeper/grape/helpers'
 
 module V1
   class Base < Grape::API
     def self.inherited(subclass)
       super
       subclass.instance_eval do
-        before do
-          doorkeeper_authorize!
-        end
-        helpers V1::Helpers::Authentication,
-                Doorkeeper::Grape::Helpers
+      before do
+        doorkeeper_authorize!
+      end
+      include V1::Helpers::Authentication
+      include Doorkeeper::Grape::Helpers
       end
     end
     HEADERS_DOCS = {

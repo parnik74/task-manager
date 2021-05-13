@@ -1,15 +1,14 @@
 # frozen_string_literal: true
 
 require 'json'
-require 'doorkeeper/grape/helpers'
 
 module V1
   class Users < Grape::API
-    helpers Doorkeeper::Grape::Helpers
+    # helpers Doorkeeper::Grape::Helpers
 
-    before do
-      doorkeeper_authorize!
-    end
+    # before do
+    #   doorkeeper_authorize!
+    # end
     resource :users do
       desc 'Get all users', http_codes: [
         { code: 200, message: 'success' },
