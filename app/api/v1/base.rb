@@ -7,9 +7,9 @@ module V1
     def self.inherited(subclass)
       super
       subclass.instance_eval do
-      before do
-        doorkeeper_authorize!
-      end
+        before do
+          doorkeeper_authorize!
+        end
       include V1::Helpers::Authentication
       include Doorkeeper::Grape::Helpers
       end
