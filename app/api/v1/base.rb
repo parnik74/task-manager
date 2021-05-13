@@ -10,8 +10,8 @@ module V1
         before do
           doorkeeper_authorize!
         end
-      include V1::Helpers::Authentication
-      include Doorkeeper::Grape::Helpers
+        include V1::Helpers::Authentication
+        include Doorkeeper::Grape::Helpers
       end
     end
     HEADERS_DOCS = {
