@@ -4,12 +4,17 @@
 
 module V1
   class Base < Grape::API
+    # before_action :authenticate_user!
+
+    # after_action :verify_authorized, except: :index, unless: :skip_pundit?
+    # after_action :verify_policy_scoped, only: :index, unless: :skip_pundit?
     def self.inherited(subclass)
       super
       subclass.instance_eval do
         before do
           doorkeeper_authorize!
         end
+        include Pundit
         include V1::Helpers::Authentication
         include Doorkeeper::Grape::Helpers
       end
@@ -63,9 +68,19 @@ module V1
 
     private
 
+    # trying to make policy_scope
+    def policy_scope(user, scope)
+      policy = "#{scope}Policy::Scope".constantize
+      policy.new(user, scope).resolve
+    end
+
     def current_user
       @current_user ||= User.find(doorkeeper_token.resource_owner_id)
     end
+
+    # def skip_pundit?
+    #   devise_controller? || params[:controller] =~ /(^(rails_)?admin)|(^pages$)/
+    # end
     mount V1::Projects
     mount V1::Tasks
     mount V1::Users
