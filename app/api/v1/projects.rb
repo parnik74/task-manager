@@ -4,18 +4,16 @@ require 'json'
 
 module V1
   class Projects < Grape::API
-    # helpers Doorkeeper::Grape::Helpers
-
-    # before do
-    #   doorkeeper_authorize!
-    # end
     resource :projects do
       desc 'Get all projects', http_codes: [
         { code: 200, message: 'success' },
         { code: RESPONSE_CODE[:forbidden], message: I18n.t('errors.forbidden') }
       ]
       get do
-        projects = Project.all
+        # projects = Project.all
+        # authorize Project, :get?
+        projects = policy_scope(Project)
+
         render_success(ProjectBlueprint.render_as_json(projects))
       end
 
@@ -26,11 +24,13 @@ module V1
       params do
         requires :name, type: String, desc: 'Project name'
         requires :status, type: String, desc: 'Project status'
-        requires :owner_id, type: Integer, desc: 'ID of the person running the project'
+        # requires :owner_id, type: Integer, desc: 'ID of the person running the project'
         optional :description, type: String, desc: 'Project desc'
       end
       post do
         project = Project.new(params)
+        project.owner_id = current_user
+        authorize project
         if project.save
           render_success(ProjectBlueprint.render_as_json(project))
         else
@@ -43,6 +43,7 @@ module V1
         helpers do
           def resource_project
             @resource_project ||= Project.find(params[:id])
+            authorize @resource_project # <=====PUNDIT
           end
 
           def soft_delete(object)

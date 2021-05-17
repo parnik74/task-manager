@@ -45,6 +45,7 @@ module V1
         helpers do
           def resource_task
             @resource_task ||= Task.find(params[:id])
+            authorize @resource_task # <=====PUNDIT
           end
         end
         desc 'Return a single task', http_codes: [
