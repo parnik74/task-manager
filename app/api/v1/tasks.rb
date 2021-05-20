@@ -4,18 +4,14 @@ require 'json'
 
 module V1
   class Tasks < Grape::API
-    # helpers Doorkeeper::Grape::Helpers
-
-    # before do
-    #   doorkeeper_authorize!
-    # end
     resource :tasks do
       desc 'Get all tasks', http_codes: [
         { code: 200, message: 'success' },
         { code: RESPONSE_CODE[:forbidden], message: I18n.t('errors.forbidden') }
       ]
       get do
-        tasks = Task.all
+        # tasks = Task.all
+        tasks = policy_scope(Task)
         render_success(TaskBlueprint.render_as_json(tasks))
       end
 
@@ -45,7 +41,6 @@ module V1
         helpers do
           def resource_task
             @resource_task ||= Task.find(params[:id])
-            authorize @resource_task # <=====PUNDIT
           end
         end
         desc 'Return a single task', http_codes: [
@@ -56,6 +51,7 @@ module V1
           requires :id, type: String, desc: 'Task id'
         end
         get do
+          authorize resource_task, :show?, policy_class: TaskPolicy
           render_success(TaskBlueprint.render_as_json(resource_task))
         end
 
@@ -76,6 +72,7 @@ module V1
         end
 
         patch do
+          authorize resource_task, :update?, policy_class: TaskPolicy
           if resource_task.update(params)
             render_success(TaskBlueprint.render_as_json(resource_task))
           else
@@ -90,6 +87,7 @@ module V1
         ]
 
         delete do
+          authorize resource_task, :destroy?, policy_class: TaskPolicy
           resource_task.soft_delete
           render_success({})
         end

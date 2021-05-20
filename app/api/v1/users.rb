@@ -4,11 +4,6 @@ require 'json'
 
 module V1
   class Users < Grape::API
-    # helpers Doorkeeper::Grape::Helpers
-
-    # before do
-    #   doorkeeper_authorize!
-    # end
     resource :users do
       desc 'Get all users', http_codes: [
         { code: 200, message: 'success' },
@@ -16,6 +11,7 @@ module V1
       ]
       get do
         users = User.all
+        # users = policy_scope(User)
         render_success(UserBlueprint.render_as_json(users))
       end
 
@@ -51,6 +47,7 @@ module V1
         end
 
         get do
+          authorize resource_user, :show?, policy_class: UserPolicy
           render_success(UserBlueprint.render_as_json(resource_user))
         end
 
@@ -64,7 +61,9 @@ module V1
           optional :name, type: String, desc: 'User name'
           optional :deleted_at, type: DateTime, desc: 'Change to null to restore user from deleted'
         end
+
         patch do
+          authorize resource_user, :update?, policy_class: UserPolicy
           if resource_user.update(params)
             render_success(UserBlueprint.render_as_json(resource_user))
           else
@@ -78,6 +77,7 @@ module V1
           { code: RESPONSE_CODE[:unauthorized], message: I18n.t('errors.session.invalid_token') }
         ]
         delete do
+          authorize resource_user, :destroy?, policy_class: UserPolicy
           resource_user.soft_delete
           render_success({})
         end
