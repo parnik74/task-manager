@@ -1,8 +1,7 @@
-class TaskPolicy < ApplicationPolicy
+class UserPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
-      # scope.all
-      scope.where(assignee_id: user.id)
+      scope.all
     end
   end
 
@@ -15,12 +14,12 @@ class TaskPolicy < ApplicationPolicy
   end
 
   def update?
-    user.id == record.assignee_id
+    user.id == record.id
     # true
   end
 
   def destroy?
-    user.id == record.assignee_id
+    user.id == record.id
     # true
   end
 end

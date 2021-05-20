@@ -11,10 +11,10 @@ module V1
       ]
       get do
         # projects = Project.all
-        # authorize Project, :get?
         projects = policy_scope(Project)
-
+        # user = current_user
         render_success(ProjectBlueprint.render_as_json(projects))
+        # render_success(user.name)
       end
 
       desc 'Create new project', http_codes: [
@@ -29,8 +29,7 @@ module V1
       end
       post do
         project = Project.new(params)
-        project.owner_id = current_user
-        authorize project
+        project.owner_id = current_user.id
         if project.save
           render_success(ProjectBlueprint.render_as_json(project))
         else
@@ -43,7 +42,6 @@ module V1
         helpers do
           def resource_project
             @resource_project ||= Project.find(params[:id])
-            authorize @resource_project # <=====PUNDIT
           end
 
           def soft_delete(object)
@@ -58,6 +56,7 @@ module V1
           requires :id, type: String, desc: 'Project id'
         end
         get do
+          authorize resource_project, :show?, policy_class: ProjectPolicy
           render_success(ProjectBlueprint.render_as_json(resource_project))
         end
 
@@ -74,7 +73,9 @@ module V1
           optional :owner_id, type: Integer, desc: 'ID of the person running the project'
           optional :deleted_at, type: DateTime, desc: 'Change to null to restore project from deleted'
         end
+
         patch do
+          authorize resource_project, :update?, policy_class: ProjectPolicy
           if resource_project.update(params)
             render_success(ProjectBlueprint.render_as_json(resource_project))
           else
@@ -88,6 +89,7 @@ module V1
           { code: RESPONSE_CODE[:unauthorized], message: I18n.t('errors.session.invalid_token') }
         ]
         delete do
+          authorize resource_project, :destroy?, policy_class: ProjectPolicy
           resource_project.soft_delete
           render_success({})
         end
